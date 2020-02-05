@@ -1,0 +1,32 @@
+---
+  - name: EC2 launcher
+    hosts: localhost
+    connection: local
+    become: false
+    gather_facts: False
+
+    vars:
+      instance_type: t2.micro
+      security_group: webserver
+      image: ami-062f7200baf2fa504
+      region: us-east-1
+      keypair: NVirginia
+      count: 1
+
+    tasks:
+    - name: launching Ec2
+      ec2:
+        aws_access_key: "AKIAZPQDAJA2N3PLDNG2"
+        aws_secret_key: "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"
+        instance_type: t2.micro
+        key_name: webserver
+        image: ami-062f7200baf2fa504
+        region: us-east-1
+        group: default
+        count: 1
+        vpc_subnet_id: subnet-df7156e1
+        wait: yes
+        assign_public_ip: yes
+        instance_tags:
+           Name: Demo
+      register: ec2

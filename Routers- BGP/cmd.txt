@@ -1,0 +1,33 @@
+192.168.122.101 R1
+192.168.122.102 R2
+192.168.122.103 R3
+192.168.122.104 R4
+
+The most important thing to comunicate with mulitple routers is first we need to connect ansible with 1st router with gateway and then set the loopback for all the routers in routers 
+route add default gw 192.16.122.120 in Ansible and configure the same in router interface Fa0/0
+
+R1:
+R1(config-if)#int FastEthernet0/0            
+R1(config-if)#ip address 192.168.122.101 255.255.255.0
+
+R2:
+R2(config-if)#int FastEthernet0/0            
+R2(config-if)#ip address 192.168.255.2 255.255.255.252
+
+R3:
+R3(config-if)#int FastEthernet0/0            
+R3(config-if)#ip address 192.168.255.6 255.255.255.252
+
+R4:
+R4(config-if)#int FastEthernet0/1
+R4(config-if)#ip address  192.168.254.1 255.255.255.252
+
+Commands:
+no router bgp 65001
+sh run | sec router bgp 
+sh ip bgp all summary
+===========================================================================
+
+
+
+

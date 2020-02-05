@@ -1,0 +1,63 @@
+#ansible S1 -i ./hosts -m raw -a "show vlan-switch brief" -u Ashok -k
+SSH password:
+
+#ansible GNS3-IOS -i ./hosts -m raw -a "show run" -u Ashok -k
+ 
+#ansible GNS3-IOS -i ./hosts -m raw -a "show ip int brief" -u Ashok -k
+
+#ansible GNS3-IOS -i ./hosts -m raw -a "show version" -u Ashok -k
+
+
+
+RROR! Syntax Error while loading YAML.
+  found a tab character that violate intendation
+
+The error appears to have been in '/root/myansible9.yml': line 25, column 1, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+    -  debug: var=print_output
+
+^ here
+There appears to be a tab character at the start of the line.
+
+YAML does not use tabs for formatting. Tabs should be replaced with spaces.
+
+For example:
+    - name: update tooling
+      vars:
+        version: 1.2.3
+#    ^--- there is a tab there.
+
+Should be written as:
+    - name: update tooling
+      vars:
+        version: 1.2.3
+# ^--- all spaces here.
+
+
+ [R3]: 
+
+
+
+
+
+ERROR! 'ios_config' is not a valid attribute for a Play
+
+The error appears to have been in '/root/myansibleR3.yml': line 31, column 3, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+
+- name: configure policer in Scavenger class
+
+
+
+
+
+
+TASK [configure top level configuration] *******************************************************************************************************************************************************
+fatal: [R3]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'cli' is undefined\n\nThe error appears to have been in '/root/myansibleR3.yml': line 8, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n  tasks:\n    - name:  configure top level configuration\n      ^ here\n"}
+        to retry, use: --limit @/root/myansibleR3.retry

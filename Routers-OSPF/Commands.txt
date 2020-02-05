@@ -1,0 +1,13 @@
+S1#sh vlan-switch brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa2/0, Fa2/1, Fa2/2, Fa2/3
+                                                Fa2/4, Fa2/5, Fa2/6, Fa2/7
+                                                Fa2/8, Fa2/9, Fa2/10, Fa2/11
+                                                Fa2/12, Fa2/13, Fa2/14, Fa2/15
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+S1#

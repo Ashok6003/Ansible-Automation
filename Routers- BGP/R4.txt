@@ -1,0 +1,85 @@
+---
+- name: Manage GNS3 devices
+  hosts: R4
+  gather_facts: false
+  connection: local
+  
+  vars:
+    cli:
+      username: Ashok
+      password: cisco
+ 
+  tasks:
+    - name: configure Loopback1
+      ios_config:
+        backup: yes
+        authorize: yes
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.122.104 255.255.255.255
+        parents: interface Loopback1
+        after:
+          - no shutdown
+
+    - name: make interface up
+      ios_interface:
+        authorize: yes
+        provider: "{{ cli }}"	  
+        name: Loopback1
+        enabled: True
+
+    - name: configure FastEthernet0/1
+      ios_config:
+        backup: yes
+        authorize: yes
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.254.1 255.255.255.252
+        parents: interface FastEthernet0/1
+        after:
+          - no shutdown
+
+    - name: make interface up
+      ios_interface:
+        authorize: yes
+        provider: "{{ cli }}"	  
+        name: FastEthernet0/1
+        enabled: True
+
+    - name: configure FastEthernet1/0
+      ios_config:
+        backup: yes
+        authorize: yes
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.254.5 255.255.255.252
+        parents: interface FastEthernet1/0
+        after:
+          - no shutdown
+  
+    - name: make interface up
+      ios_interface:
+        authorize: yes	  
+        provider: "{{ cli }}"
+        name: FastEthernet1/0
+        enabled: True
+
+    - name: configure router bgp 65002
+      ios_config:
+        authorize: yes
+        backup: yes
+        provider: "{{ cli }}"
+        parents: router bgp 65002
+        lines:
+          - bgp log-neighbor-changes
+          - neighbor 192.168.254.2 remote-as 65000
+          - neighbor 192.168.254.6 remote-as 65000      
+          - address-family l2vpn vpls
+          - neighbor 192.168.254.2 activate               
+          - neighbor 192.168.254.2 send-community extended
+          - neighbor 192.168.254.6 activate               
+          - neighbor 192.168.254.6 send-community extended
+
+      register: print_output
+
+    -  debug: var=print_output
