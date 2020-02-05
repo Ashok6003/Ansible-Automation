@@ -1,3 +1,0 @@
----
-supervisor_awx_home: '/var/lib/awx'
-supervisor_exec_vars_only: false

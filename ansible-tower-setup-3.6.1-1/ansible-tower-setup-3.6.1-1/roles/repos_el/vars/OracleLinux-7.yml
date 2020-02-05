@@ -1,9 +1,0 @@
----
-yum_repo_keys:
-  - 'RPM-GPG-KEY-redhat-release'
-
-# List of Oracle Linux repositories to enable
-oracle_linux_repos:
-    - ol7_addons
-
-oracle_scl_repo_baseurl: "https://yum$ociregion.oracle.com/repo/OracleLinux/OL{{ ansible_distribution_major_version }}/SoftwareCollections/x86_64"

@@ -1,9 +1,0 @@
-loopback_users = none
-listeners.tcp.default = {{ rabbitmq_port|default(5672) }}
-cluster_partition_handling = pause_minority
-{% if rabbitmq_use_ssl|default(False)|bool %}
-listeners.ssl.default = {{ rabbitmq_ssl_port|default(5671) }}
-ssl_options.cacertfile=/etc/rabbitmq/ca.crt
-ssl_options.certfile=/etc/rabbitmq/rmq-ssl.pem
-ssl_options.verify=verify_peer
-{% endif %}
