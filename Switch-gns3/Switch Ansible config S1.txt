@@ -1,0 +1,90 @@
+---
+- name: Switch specific config
+  hosts: S1
+  gather_facts: false
+  connection: local
+
+  vars:
+    cli:
+      username: Ashok
+      password: cisco
+
+  tasks:
+    - name: configure IP Address for FastEthernet0/1
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.122.76 255.255.255.0
+        parents: interface FastEthernet0/1
+    - name: configure IP Address for FastEthernet2/0
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.122.77 255.255.255.0
+        parents: interface FastEthernet2/0
+    - name: configure IP Address for FastEthernet2/1
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.122.78 255.255.255.0
+        parents: interface FastEthernet2/1	
+    - name: configure IP Address for FastEthernet2/2
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+        - ip address 192.168.122.79 255.255.255.0
+        parents: interface FastEthernet2/2
+        after:
+          - no shutdown
+
+      register: print_output
+
+    - debug: var=print_output
+
+
+
+    - name: Switch config
+      ios_config:
+        provider: "{{ cli }}"
+        lines:
+          - vlan 2
+          - vlan 3
+          - vlan 4
+          - vlan 5
+ 
+          - vtp mode transparent
+          - errdisable recovery cause all
+ 
+          - snmp-server community python1 RO
+          - snmp-server community python2 RW
+
+          - clock timezone PST -8
+          - clock summer-time PDT recurring
+          - service timestamps debug datetime msec localtime
+          - service timestamps log datetime msec localtime
+
+          - "vlan 1,2,3,4,5"
+          - ip default-gateway 192.168.122.1
+
+      register: print_output
+
+    - debug: var=print_output
+
+
+
+
+    - name: Interface settings
+      ios_config:
+        provider: "{{ cli }}"
+        parents: "interface {{ item.interface }}"
+        after:
+          - no shutdown
+      with_items:
+        - { interface : FastEthernet0/1,vlan : 100, voice_vlan : 101 }
+        - { interface : FastEthernet2/0,vlan : 20, voice_vlan : 101 }
+        - { interface : FastEthernet2/1,vlan : 30, voice_vlan : 101 }
+        - { interface : FastEthernet2/2,vlan : 40, voice_vlan : 101 }
+
+      register: print_output
+
+    - debug: var=print_output

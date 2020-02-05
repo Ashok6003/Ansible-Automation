@@ -1,0 +1,59 @@
+
+Asure
+Aws Openstack
+Mgmt ip to open in browser 192.168.78.27
+
+
+
+Credentials for BIGIP VM
+
+root
+admin
+
+in web 192.168.78.27
+
+admin
+admin
+
+C:\Users\ak1usr1624\Documents\Virtual Machines\BIGIP-13.1
+
+always make sure 4GB is available for the BIG ip file to run in VM 
+
+Big ip 
+
+netsh interface portproxy add v4tov4 listenport=443 listenaddress=10.200.142.132 connectport=443 connectaddress=192.168.78.27
+
+WZFUD-ZRFDD-RLCQY-MEXPD-TCVKIXA
+
+
+Open the linux server with putty in Giolab with IP l9tvap1037
+ak1usr1624
+ChangeMe#9
+
+#cat /etc/ansible/hosts  --> to assign IP
+#cat /etc/ansible/ansible.cfg --> to configure the config in ansible
+#cat /opt/ansible/network_ansible/BIGIP.yml --> to run BIGIP yaml
+
+ ansible-playbook BIGIP.yml
+
+In web pool we need to give http to make it greeen enabled
+
+
+
+192.168.78.27
+
+10.200.42.145 external self ip
+10.200.42.155  external floating ip 
+
+
+10.200.42.177 virtual ip 
+
+192.168.10.145 internal self ip 
+192.168.10.155 internal floating ip
+
+192.168.20.145 HA
+
+Webservers
+192.168.78.11
+192.168.78.12
+192.168.78.13

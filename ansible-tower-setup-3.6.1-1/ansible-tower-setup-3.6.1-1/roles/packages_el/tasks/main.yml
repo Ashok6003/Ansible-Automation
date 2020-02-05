@@ -1,0 +1,16 @@
+---
+- name: 'include packages_el variables'
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml'        # RedHat-7
+        - '{{ ansible_os_family }}.yml'                                                 # RedHat
+      paths: '../vars'
+
+- include: install_deps.yml
+
+- include_tasks: install_tower.yml
+  when: packages_el_install_tower | bool
+
+- include_tasks: install_postgres.yml
+  when: packages_el_install_postgres | bool or config_dynamic_database == 'internal'

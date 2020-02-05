@@ -1,0 +1,52 @@
+Output:
+S1#sh run | i snmp
+snmp-server community python1 RO
+snmp-server community python2 RW
+S1#sh run
+Building configuration...
+
+Current configuration : 2086 bytes
+!
+version 12.4
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+no service password-encryption
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+memory-size iomem 5
+clock timezone PST -8
+clock summer-time PDT recurring
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery cause rootguard
+errdisable recovery cause pagp-flap
+errdisable recovery cause dtp-flap
+
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input all
+!
+
+commands:
+sh run | i snmp
+sh run
