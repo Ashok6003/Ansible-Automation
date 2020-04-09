@@ -1,0 +1,74 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+    - name: Create security group
+      ec2_group:
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        name: Redington
+        description: Redington
+        region: ap-south-1
+        rules:
+            - proto: tcp
+              from_port: 22
+              to_port: 22
+              cidr_ip: 0.0.0.0/0
+            - proto: tcp
+              from_port: 80
+              to_port: 80
+              cidr_ip: 0.0.0.0/0
+            - proto: tcp
+              from_port: 443
+              to_port: 443
+              cidr_ip: 0.0.0.0/0
+        rules_egress:
+            - proto: all
+              cidr_ip: 0.0.0.0/0
+      register: basic_firewall
+    
+    - name: Provision a set of instances
+      ec2:
+         aws_access_key: "{{ access_key }}"
+         aws_secret_key: "{{ secret_key }}"
+         key_name: keerthi
+         group: Redington
+         instance_type: t2.micro
+         image: "{{ ami_id }}"
+         region: ap-south-1
+         wait: true
+         exact_count: 1
+         count_tag:
+            Name: Demo
+         instance_tags:
+            Name: Demo
+      register: ec2
+
+    - name: Display all variables/facts known for a host
+      debug:
+        var: ec2
+  
+    - name: Add all instance public IPs to host group
+      add_host: hostname={{ item.public_ip }} groupname=awshosts
+      with_items: "{{ec2.tagged_instances}}"
+    
+      #    - set_fact: ansible_ssh_private_key_file=/home/keerthi/Redt/keerthi.pem
+
+    - name: Wait for SSH to come up
+      wait_for: host={{ item.public_ip }} port=22 delay=60 timeout=320 state=started
+      with_items: "{{ec2.tagged_instances}}"
+
+    - name: Accept new ssh fingerprints                                       
+      shell: ssh-keyscan -H "{{ ec2['tagged_instances'][0]['public_ip'] }}" >> ~/.ssh/known_hosts          
+
+- hosts: awshosts
+  remote_user: ec2-user
+  sudo: yes
+
+  tasks:
+    - name: install  git
+      yum: name=git state=present
+
+    - name: install apache
+      yum: name=httpd state=present
