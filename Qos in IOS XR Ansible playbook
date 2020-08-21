@@ -1,0 +1,37 @@
+---
+- name: Manage GNS3 devices
+  hosts: Routers
+  gather_facts: false
+  connection: local
+  
+  vars:
+    cli:
+      username: admin
+      password: admin
+
+  tasks:
+    - name: Configure policy-map
+      ios_config:
+        backup: yes
+        authorize: yes        
+        provider: "{{ cli }}"
+        lines:
+          - class-map class
+          - match mpls experimental topmost 0
+          - exit
+          - policy-map child
+          - class prec1
+          - police rate 100000000 peak-rate 3125000 peak-burst 3125000
+          - conform-action set mpls experimental imp 1
+          - conform-action set qos-group 1
+          - exit
+          - exit
+          - exit
+          - interface gigabitethernet 0/0/0/0
+          - service-policy input policy1
+
+      register: print_output
+
+    -  debug: var=print_output
+
+		
