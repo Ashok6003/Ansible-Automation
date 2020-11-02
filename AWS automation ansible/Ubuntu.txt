@@ -1,0 +1,6 @@
+SSl verification can be disabled by the following commands
+git config --global http.sslverify false
+git clone -b 15.0.1 https://github.com/ansible/awx.git
+
+
+e83771b9fb67fbd60d4e6bc500b6534ddef029780f6b12738ec2fda8389b6f21
