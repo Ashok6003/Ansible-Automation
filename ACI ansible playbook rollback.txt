@@ -1,0 +1,94 @@
+---
+- name: Create a Tenant, App profile, VRF, Bridge Domain, and 3 EPGs
+  hosts: APIC
+  gather_facts: false
+  vars:
+    aci_host: 10.10.20.14
+    aci_username: admin
+    aci_password: C1sco12345
+    aci_tenant: Test
+    aci_ap_name: Test-apps
+    aci_bd: Test-bridge
+    aci_vrf: Test-vrf
+    aci_epgs:
+      - _epg: Web
+        _desc: Web Server
+      - _epg: App
+        _desc: Application Server
+      - _epg: DB
+        _desc: Database Server
+   
+
+  tasks:
+  - name: Create a tenant
+    aci_tenant:
+      host: "{{ aci_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      tenant: "{{ aci_tenant }}"
+      description: Ansible Testing
+      state: absent
+      validate_certs: false
+    delegate_to: localhost
+    register: all_tenants
+
+  - name: Add a new AP
+    aci_ap:
+      host: "{{ aci_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      tenant: "{{ aci_tenant }}"
+      ap: "{{ aci_ap_name }}"
+      description: Ansible Testing
+      state: absent
+      validate_certs: false
+    delegate_to: localhost
+    register: all_tenants
+
+  - name: Add a new VRF to a tenant
+    aci_vrf:
+      host: "{{ aci_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      vrf: "{{ aci_vrf }}"
+      tenant: "{{ aci_tenant }}"
+      descr:  Ansible Testing
+      policy_control_preference: enforced
+      policy_control_direction: ingress
+      state: absent
+      validate_certs: false
+    delegate_to: localhost
+    register: all_tenants
+  - name: Add Bridge Domain
+  
+    aci_bd:
+      host: "{{ aci_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      tenant: "{{ aci_tenant }}"
+      bd: "{{ aci_bd }}"
+      vrf: "{{ aci_vrf }}"
+      state: absent
+      validate_certs: false
+    delegate_to: localhost
+    register: all_tenants
+
+  - name: Add new EPGs
+    aci_epg:
+      host: "{{ aci_host }}"
+      username: "{{ aci_username }}"
+      password: "{{ aci_password }}"
+      tenant: "{{ aci_tenant }}"
+      ap: "{{ aci_ap_name }}"
+      epg: "{{ all_epgs._epg }}"
+      description: "{{ all_epgs._desc}}"
+      bd: "{{ aci_bd }}"
+      priority: unspecified
+      intra_epg_isolation: unenforced
+      state: absent
+      validate_certs: false
+    delegate_to: localhost
+    register: all_tenants
+    loop: "{{ aci_epgs }}"
+    loop_control:
+      loop_var: all_epgs
