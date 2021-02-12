@@ -5,7 +5,7 @@
 
   vars:
     provider:
-      server: 10.200.142.132
+      server: 192.168.78.128
       user: admin
       password: admin
       validate_certs: false
