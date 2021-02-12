@@ -1,6 +1,6 @@
 ---
 - name: Delete a VIP,pool,pool members and nodes
-  hosts: bigips
+  hosts: 192.168.78.128
   connection: local
 
   vars:
