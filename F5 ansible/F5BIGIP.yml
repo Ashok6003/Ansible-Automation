@@ -7,7 +7,7 @@
     provider:
       server: 192.168.78.128
       user: admin
-      password: admin
+      password: Ashok@456
       validate_certs: false
       server_port: "443"
 
@@ -45,7 +45,7 @@
         bigip_virtual_server:
           provider: "{{ provider }}"
           description: foo-vip
-          destination: 10.200.42.177
+          destination: 192.168.78.177
           name: vip-1
           pool: web
           port: "80"
